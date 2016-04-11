@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Bluray</title>
+
+  <link rel="stylesheet" th:href="@{/css/base.css}"/>
+  <link rel="stylesheet" th:href="@{/css/bluray.css}"/>
+  <link rel="stylesheet" th:href="@{/webjars/font-awesome/4.5.0/css/font-awesome.min.css}"/>
+  <link rel="stylesheet" th:href="@{/webjars/github-com-kartik-v-bootstrap-star-rating/3.5.3/css/star-rating.min.css}"/>
+
+
+</head>
+<body>
+<div class="container-fluid">
+  <div th:include="navBar :: navbar"></div>
+  <div class="content">
+
+    <row sec:authorize="hasAuthority('ADMIN')">
+      <form class="form-horizontal" th:object="${bluray}" th:action="@{/admin/bluray/__${bluray.id}__}" METHOD="post">
+        <fieldset>
+          <legend>Edit Bluray</legend>
+          <div class="form-group">
+            <label for="title" class="col-sm-2 control-label">Title</label>
+            <div class="col-md-4">
+              <input th:field="*{title}" type="text" class="form-control" id="title" placeholder="Title"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="imdb" class="col-sm-2 control-label">IMDB-ID</label>
+            <div class="col-md-4">
+              <input th:field="*{imdb}" type="text" class="form-control" id="imdb" placeholder="IMDb-ID"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="rating" class="col-sm-2 control-label">Rating</label>
+            <div class="col-md-4">
+              <input th:field="*{rating}" type="number" class="rating form-control" id="rating" placeholder="rating"/>
+            </div>
+          </div>
+          <a class="col-md-offset-2 nounderline"
+             data-toggle="collapse" href="#moreEdit"
+             aria-expanded="false" aria-controls="collapseExample">
+            -- More --
+          </a>
+          <div class="collapse top-buffer" id="moreEdit">
+            <div class="form-group">
+              <label for="languages" class="col-sm-2 control-label">Languages</label>
+              <div class="col-md-4">
+                <select th:field="*{languages}" multiple="multiple" id="languages" class="form-control">
+                  <option th:each="language : ${T(de.knuff0r.bsb.domain.Bluray.Language).values()}"
+                          th:value="${language}"
+                          th:text="${language}"></option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="languages" class="col-sm-3 control-label">
+                <input th:field="*{d3}" type="checkbox" id="3d"/>
+                3D
+              </label>
+              <div class="checkbox-inline">
+                <label for="original">
+                  <input th:field="*{original}" type="checkbox" id="original"/>
+                  original
+                </label>
+              </div>
+              <div class="checkbox-inline">
+                <label for="ripped">
+                  <input th:field="*{ripped}" type="checkbox" id="ripped"/>
+                  ripped
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10 top-buffer">
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </fieldset>
+        <input
+            type="hidden" th:name="${_csrf.parameterName}"
+            th:value="${_csrf.token}"/>
+        <input type="hidden" name="_method" value="put"/>
+      </form>
+    </row>
+
+
+    <row class="top-buffer">
+      <h1 id="preview"></h1>
+      <div class="col-md-3">
+        <img class="img-responsive img-rounded" th:src="@{'/bluray/image?surl='+${movie.poster}}" alt="Movie cover"/>
+        <div class="panel panel-warning top-buffer">
+          <div class="panel-heading">Tickets</div>
+          <div class="panel-body">
+            <ul class="list-group">
+              <li th:each="ticket : ${bluray.tickets}" class="list-group-item">
+                <span th:text="${ticket.user.username}"></span>
+                <span th:text="${ticket.dateAsString()}"></span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-9">
+
+        <form class="form-horizontal" role="form" th:object="${order}" th:action="@{'/bluray/'+${bluray.id}+'/order'}"
+              method="post">
+          <fieldset>
+            <legend th:text="${bluray.title}"></legend>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="num">Number</label>
+              <div class="col-sm-2">
+                <input min="1" id="num" class="form-control" type="number" value="1" th:field="*{num}"/>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="prem">Premium</label>
+              <div class="col-sm-2">
+                <input th:field="*{prem}" checked="checked" id="prem" type="checkbox"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="price">Price [€]</label>
+              <div class="col-sm-2">
+                <input readonly="readonly" class="form-control" type="number" id="price" th:field="*{price}"/>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-lg btn-success">
+              <span class="glyphicon glyphicon-shopping-cart"></span>
+            </button>
+          </fieldset>
+        </form>
+
+        <div class="top-buffer alert alert-danger alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+              aria-hidden="true">&times;</span></button>
+          <strong>Obacht:</strong>
+          Die folgenden Information, inklusive dem Cover auf der linken Seite wurden automatisch generiert.
+          Sie werden generiert durch den Titel(+ Jahr) oder der IMDb-ID. Wenn der Bluray keine IMDb-ID oder
+          kein Jahr zugewiesen wurde, kann es sein, dass die falschen Informationen hier abgebildet werden.
+          Wenn du unsicher bist, ob der Inhalt hier rechtens ist, dann schicke ein Ticket um zu helfen.
+          <br/>
+          <form class="form" role="form" th:action="@{'/bluray/'+${bluray.id}+'/ticket'}"
+                method="POST">
+            <button type="submit" class="btn btn-primary">Send Ticket <i class="fa fa-ticket"></i></button>
+            <input
+                type="hidden" th:name="${_csrf.parameterName}"
+                th:value="${_csrf.token}"/>
+          </form>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">Details</div>
+          <div class="panel-body">
+            <ul class="list-group">
+              <li class="list-group-item">Title: <span th:text="${movie.title}"></span></li>
+              <li class="list-group-item">Year: <span th:text="${movie.year}"></span></li>
+              <li class="list-group-item">Rated: <span th:text="${movie.rated}"></span></li>
+              <li class="list-group-item">Runtime: <span th:text="${movie.runtime}"></span></li>
+              <li class="list-group-item">Genres: <span th:text="${movie.genres}"></span></li>
+              <li class="list-group-item">Director: <span th:text="${movie.director}"></span></li>
+              <li class="list-group-item">Writer: <span th:text="${movie.writer}"></span></li>
+              <li class="list-group-item">Actors: <span th:text="${movie.actors}"></span></li>
+              <li class="list-group-item">Plot: <span th:text="${movie.plot}"></span></li>
+              <li class="list-group-item">Language: <span th:text="${movie.language}"></span></li>
+              <li class="list-group-item">Country: <span th:text="${movie.country}"></span></li>
+              <li class="list-group-item">Metascore: <span th:text="${movie.metascore}"></span></li>
+              <li class="list-group-item">IMDb-Rating: <span th:text="${movie.imdbRating}"></span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </row>
+
+
+  </div>
+</div>
+
+<script type="text/javascript"
+        th:src="@{/webjars/jquery/2.1.1/jquery.min.js}"></script>
+<script type="text/javascript"
+        th:src="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}"></script>
+<script type="text/javascript"
+        th:src="@{/webjars/github-com-kartik-v-bootstrap-star-rating/3.5.3/js/star-rating.min.js}"></script>
+<script th:inline="javascript">
+  /*<![CDATA[*/
+
+  var price = [[${price}]];
+  var surCharge = [[${surCharge}]];
+
+  /*]]>*/
+</script>
+
+<script>
+  $("#rating").rating({stars: 10, showCaption: false, min: 0, max: 10, step: 1, size: 'sm'});
+
+  $('document').ready(function () {
+    $('#price').val(calcPrice(1));
+  });
+
+  $( "#num" ).change(function() {
+    $('#price').val(calcPrice());
+  });
+  $("#prem").change(function() {
+    $('#price').val(calcPrice());
+  });
+
+  function calcPrice() {
+    var res = 0;
+    var number = $("#num").val();
+    if (!document.getElementById("prem").checked) {
+      res = number * (price);
+    }
+    else {
+      res = number * (price + surCharge);
+    }
+    return res;
+  }
+
+
+</script>
+</body>
+</html>

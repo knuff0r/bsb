@@ -1,0 +1,5 @@
+@CHARSET "UTF-8";
+
+form input, select {
+ margin-bottom: 8px;
+}

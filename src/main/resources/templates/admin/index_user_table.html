@@ -1,0 +1,15 @@
+<div th:fragment="users" xmlns:th="http://www.thymeleaf.org">
+  <table id="users" class="table">
+    <tbody>
+    <tr th:each="user : ${nonAccepted}">
+      <td th:text="${user.email}"></td>
+      <td>
+        <a th:data="${user.id}" class="btn_accept btn btn-success"><span class="glyphicon glyphicon-ok"></span></a>
+      </td>
+      <td>
+        <a th:data="${user.id}" class="btn_deny btn btn-danger"><span class="glyphicon glyphicon-remove"></span></a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

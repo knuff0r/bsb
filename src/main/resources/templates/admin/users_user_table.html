@@ -1,0 +1,49 @@
+<div th:fragment="users" xmlns:th="http://www.thymeleaf.org">
+  <p>There are <span th:text="${#lists.size(users)}"></span> users overall.</p>
+  <table id="users" class="table table-hover table-condensed">
+    <thead>
+    <tr>
+      <th>Username</th>
+      <th class="hidden-xs hidden-sm">Email</th>
+      <th>Active</th>
+      <th>Accepted</th>
+      <th class="hidden-xs hidden-sm">Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+      <td th:id="${user.id}"><a th:href="@{'/user/'+${user.id}}" th:text="'@' + ${user.username}">username</a>
+      </td>
+      <td class="hidden-sm hidden-xs" th:text="${user.email}">email</td>
+      <td class="col-md-2" th:if="${user.active}"><span class="glyphicon glyphicon-thumbs-up text-success"
+                                       aria-hidden="true"><span class="hidden">1
+          </span></span></td>
+      <td class="col-md-2" th:if="!${user.active}"><span class="danger glyphicon glyphicon-thumbs-down text-danger"
+                                        aria-hidden="true"><span class="hidden">0</span> </span></td>
+      <td class="col-md-2" th:if="${user.accepted}"><span class="glyphicon glyphicon-thumbs-up text-success"
+                                         aria-hidden="true"><span
+          class="hidden">1
+          </span></span></td>
+      <td class="col-md-2" th:if="!${user.accepted}"><span class="danger glyphicon glyphicon-thumbs-down text-danger"
+                                          aria-hidden="true"><span class="hidden">0</span> </span></td>
+      <td class="col-md-3 hidden-xs hidden-sm">
+        <div th:id="${'div_visible_delete_'+user.id}">
+          <!--
+          <a href="#" data-toggle="modal" data-target="#deleteModal" th:attr="data-username=${user.username},
+            data-user_id=${user.id}">
+            -->
+            <span th:data="${user.id}" class="btn_delete btn glyphicon glyphicon-trash text-danger"></span>
+        </div>
+
+        <div th:id="${'div_hidden_delete_'+user.id}" class="hidden">
+          Do you really want to delete this user?
+          <span th:data="${user.id}" class="btn_delete_ok btn glyphicon glyphicon-ok text-success"></span>
+          <span th:data="${user.id}" class="btn_delete_cancel btn glyphicon glyphicon-remove text-danger"></span>
+
+        </div>
+
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

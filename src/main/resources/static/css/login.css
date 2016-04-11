@@ -1,0 +1,21 @@
+@CHARSET "UTF-8";
+
+body {
+    background-color: aliceblue;
+}
+
+.registered {
+    width:400px;
+    text-align: center;
+    position:absolute;
+    top:50px;
+    left:calc(50vw - 200px );
+}
+
+div#register {
+    margin-top:25vh;
+}
+
+div#register #submit {
+    margin-top:6px;
+}

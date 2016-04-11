@@ -1,0 +1,6 @@
+package de.knuff0r.bsb.domain;
+
+public enum Status {
+	CANCELED, READY_FOR_COLLECTION,
+	WAITING_FOR_ACCEPTANCE, IN_PROGRESS, WAITING_FOR_CANCEL, PAID_AND_DELIVERED;
+}
