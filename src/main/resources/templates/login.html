@@ -46,7 +46,7 @@
             <input autofocus="autofocus" required="required" type="text" class="form-control" name="username"
                    id="username" placeholder="Username or Email"/>
             <span class="input-group-addon" data-toggle="tooltip" data-placement="bottom" title="Remember me">
-              <input checked="checked" type="checkbox" value="remember-me"/></span>
+              <input checked="checked" type="checkbox" value="remember-me" class="hidden"/></span>
           </div>
           <div class="input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
@@ -95,9 +95,9 @@
 
 
 <script type="text/javascript"
-        th:src="@{/webjars/jquery/2.1.1/jquery.min.js}"></script>
+        th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
 <script type="text/javascript"
-        th:src="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}"></script>
+        th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
 <script type="text/javascript">
   $(function () {
     $('[data-toggle="tooltip"]').tooltip()

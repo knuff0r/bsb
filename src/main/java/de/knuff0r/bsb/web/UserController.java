@@ -32,6 +32,7 @@ public class UserController {
 
     @RequestMapping(value = "/admin/users/{user}/accept", method = RequestMethod.PUT)
     public String accept(Model model, @ModelAttribute User user) {
+        App.log.info("user "+user.getUsername()+" successfully accpeted");
         user.setAccepted(true);
         userService.save(user);
         model.addAttribute("nonAccepted", userService.getNonAcceptedUsers());

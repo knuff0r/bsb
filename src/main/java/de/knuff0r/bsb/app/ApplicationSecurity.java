@@ -29,13 +29,14 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
                // .csrf()
                // .disable()
                 .authorizeRequests()
-                .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/css/*").permitAll()
                 .antMatchers("/register").permitAll()
                 .antMatchers("/activate/**").permitAll()
                 .antMatchers("/**/favicon.ico").permitAll()
                 .antMatchers("/webjars/**").permitAll()
-                .antMatchers("/**").hasAuthority("USER").anyRequest().fullyAuthenticated().and().formLogin()
+                //.antMatchers("/**").hasAuthority("USER")
+                .antMatchers("/admin/**").hasAuthority("ADMIN")
+                .anyRequest().fullyAuthenticated().and().formLogin()
                 .loginPage("/").failureUrl("/?loginFail").permitAll().and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/");
     }

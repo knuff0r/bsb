@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   <title>Admin</title>
 
   <link rel="stylesheet" th:href="@{/css/base.css}"/>
@@ -27,16 +29,20 @@
 
 
 <script type="text/javascript"
-        th:src="@{/webjars/jquery/2.1.1/jquery.min.js}"></script>
+        th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
 <script type="text/javascript"
-        th:src="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}"></script>
+        th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
 <script type="text/javascript">
+
+
   var token = $("meta[name='_csrf']").attr("content");
   var header = $("meta[name='_csrf_header']").attr("content");
+
 
   $(document).ajaxSend(function (e, xhr, options) {
     xhr.setRequestHeader(header, token);
   });
+
 
   var body = $('body');
 
@@ -46,12 +52,13 @@
       type: "PUT",
       url: "admin/users/" + id + "/accept",
       success: function (response) {
+        console.info("bla")
         $("#user-table").html(response);
       },
       error: function (response) {
         console.error(response);
       }
-    })
+    });
   });
   body.on('click', '.btn_deny', function () {
     var id = $(this).attr('data');
